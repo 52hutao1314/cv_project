@@ -8,11 +8,11 @@
 
 人脸识别技术作为生物特征识别领域的核心技术之一，已在现代社会中扮演着日益重要的角色。从智能手机解锁、移动支付等日常应用，到访问控制、公共安全监控和身份认证等专业领域，该技术都提供了高效、自然且非接触式的解决方案。其核心在于通过计算机视觉技术，分析数字图像或视频中的人脸特征，并将其与数据库中的已知人脸进行比对，从而实现个体身份的识别与验证。
 
-本报告详细介绍了一个基于Python环境、利用VGG-Face2数据集和DeepFace深度学习框架所构建的人脸识别系统。我们实现了从数据预处理、模型构建到性能评估的完整开发流程，旨在探索和展示现代深度学习模型在人脸识别任务中的强大能力。
+本报告详细介绍了一个基于Python环境、利用VGG-Face2数据集[[1]](#vggface2)和DeepFace深度学习框架[[3]](#deepface)所构建的人脸识别系统。我们实现了从数据预处理、模型构建到性能评估的完整开发流程，旨在探索和展示现代深度学习模型在人脸识别任务中的强大能力。
 
 本项目的核心目标具体如下：
 1. **构建与预处理数据集**：从大规模的VGG-Face2数据集中筛选并构建一个合理、可用的训练与测试子集，以适应项目开发的需求。
-2. **实现人脸识别模型**：利用DeepFace框架封装的先进的预训练模型（如VGG-Face用于特诊提取）和高精度的人脸检测器（如RetinaFace），创建一个功能强大的人脸识别与验证系统。
+2. **实现人脸识别模型**：利用DeepFace框架封装的先进的预训练模型（如VGG-Face用于特征提取）和高精度的人脸检测器（如RetinaFace），创建一个功能强大的人脸识别与验证系统。
 3. **系统性能综合评估**：设计并执行全面的测试方案，使用正样本（数据库内已知个体）和负样本（数据库外未知个体）对系统的准确率、召回率等关键指标进行量化评估。
 4. **确定最佳识别阈值**：通过分析系统在不同距离阈值下的表现，找到一个能够在识别准确性（True Positive Rate）和误报率（False Positive Rate）之间取得最佳平衡的阈值，以确保系统的可靠性。
 
@@ -40,7 +40,7 @@ DeepFace封装了多种业界顶尖的预训练人脸识别模型，如VGG-Face�
 
 ## 2.4 RetinaFace人脸检测模型
 
-RetinaFace是一个先进的、基于深度学习的单阶段人脸检测模型，以其在真实图像上的高精度检测能力而闻名。与传统检测器相比，RetinaFace不仅能检测各种尺寸和姿态的人脸，还能在存在部分遮挡、模糊和极端光照等挑战性条件下保持优异性能。
+RetinaFace[[2]](#retinaface)是一个先进的、基于深度学习的单阶段人脸检测模型，以其在真实图像上的高精度检测能力而闻名。与传统检测器相比，RetinaFace不仅能检测各种尺寸和姿态的人脸，还能在存在部分遮挡、模糊和极端光照等挑战性条件下保持优异性能。
 
 RetinaFace在一个统一的框架内同时完成人脸边界框预测、5个关键面部特征点（双眼中心、鼻尖、嘴角）定位以及3D面部重建。通过监督学习和自监督学习的结合，RetinaFace能够非常精确地定位面部区域和关键点。RetinaFace的多任务损失函数设计使其在检测精度和速度上都表现出色，适用于实时应用场景。其网络结构基于ResNet和FPN，能够有效处理不同尺度的人脸。
 ![retinaface-framework](assets/retinaface-framework.png)
@@ -50,7 +50,7 @@ RetinaFace在一个统一的框架内同时完成人脸边界框预测、5个关
 
 ## 2.3 VGG-Face人脸识别模型
 
-VGG-Face是由牛津大学VGG团队提出的一种基于深度卷积神经网络（CNN）的人脸识别模型。该模型结构基于经典的VGG-16网络，并通过在早期的大规模人脸数据集（VGG-Face）上进行训练，使其能够学习到用于区分不同人脸身份的丰富、稳健的特征表示。
+VGG-Face[[4]](#vggface)是由牛津大学VGG团队提出的一种基于深度卷积神经网络（CNN）的人脸识别模型。该模型结构基于经典的VGG-16网络，并通过在早期的大规模人脸数据集（VGG-Face）上进行训练，使其能够学习到用于区分不同人脸身份的丰富、稳健的特征表示。
 
 VGG-Face将一张输入的人脸图像通过深度网络，最终在前馈过程的末端生成一个高维的特征向量（即“embedding”）。这个向量可以被视为该人脸在特征空间中的一个独特坐标。在理想情况下，来自同一个体的不同照片所生成的特征向量在空间中会彼此靠近，而来自不同个体的向量则会相互远离。因此，通过计算两个特征向量之间的距离（如欧氏距离），就可以量化两个人脸的相似度。
 
@@ -192,4 +192,7 @@ $$
 
 # References
 
-‍
+1. <a id="vggface2">[1]‍</a> Cao, Q., Shen, L., Xie, W., Parkhi, O. M., & Zisserman, A. (2018, May). Vggface2: A dataset for recognising faces across pose and age. In 2018 13th IEEE international conference on automatic face & gesture recognition (FG 2018) (pp. 67-74). IEEE.
+2. <a id="retinaface">[3]</a> Deng, J., Guo, J., Ververas, E., Kotsia, I., & Zafeiriou, S. (2020). RetinaFace: Single-Shot Multi-Level face localisation in the wild. 2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR). https://doi.org/10.1109/cvpr42600.2020.00525
+3. <a id="deepface">[3]</a> Serengil, S. I., & Ozpinar, A. (2020). LightFace: a Hybrid Deep Face Recognition framework. 2022 Innovations in Intelligent Systems and Applications Conference (ASYU), 1–5. https://doi.org/10.1109/asyu50717.2020.9259802
+4. <a id="vggface">[4]</a> Parkhi, O., Vedaldi, A., & Zisserman, A. (2015). Deep face recognition. In BMVC 2015-Proceedings of the British Machine Vision Conference 2015. British Machine Vision Association.
