@@ -192,7 +192,7 @@ $$
 
 # References
 
-1. <a id="vggface2">[1]‍</a> Cao, Q., Shen, L., Xie, W., Parkhi, O. M., & Zisserman, A. (2018, May). Vggface2: A dataset for recognising faces across pose and age. In 2018 13th IEEE international conference on automatic face & gesture recognition (FG 2018) (pp. 67-74). IEEE.
-2. <a id="retinaface">[3]</a> Deng, J., Guo, J., Ververas, E., Kotsia, I., & Zafeiriou, S. (2020). RetinaFace: Single-Shot Multi-Level face localisation in the wild. 2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR). https://doi.org/10.1109/cvpr42600.2020.00525
-3. <a id="deepface">[3]</a> Serengil, S. I., & Ozpinar, A. (2020). LightFace: a Hybrid Deep Face Recognition framework. 2022 Innovations in Intelligent Systems and Applications Conference (ASYU), 1–5. https://doi.org/10.1109/asyu50717.2020.9259802
-4. <a id="vggface">[4]</a> Parkhi, O., Vedaldi, A., & Zisserman, A. (2015). Deep face recognition. In BMVC 2015-Proceedings of the British Machine Vision Conference 2015. British Machine Vision Association.
+1. <a id="vggface2"></a> Cao, Q., Shen, L., Xie, W., Parkhi, O. M., & Zisserman, A. (2018, May). Vggface2: A dataset for recognising faces across pose and age. In 2018 13th IEEE international conference on automatic face & gesture recognition (FG 2018) (pp. 67-74). IEEE.
+2. <a id="retinaface"></a> Deng, J., Guo, J., Ververas, E., Kotsia, I., & Zafeiriou, S. (2020). RetinaFace: Single-Shot Multi-Level face localisation in the wild. 2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR). https://doi.org/10.1109/cvpr42600.2020.00525
+3. <a id="deepface"></a> Serengil, S. I., & Ozpinar, A. (2020). LightFace: a Hybrid Deep Face Recognition framework. 2022 Innovations in Intelligent Systems and Applications Conference (ASYU), 1–5. https://doi.org/10.1109/asyu50717.2020.9259802
+4. <a id="vggface"></a> Parkhi, O., Vedaldi, A., & Zisserman, A. (2015). Deep face recognition. In BMVC 2015-Proceedings of the British Machine Vision Conference 2015. British Machine Vision Association.
