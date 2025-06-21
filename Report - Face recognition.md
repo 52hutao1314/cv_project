@@ -147,7 +147,7 @@ $$
 
     ![image](assets/image-20250619165142-p7l9oxn.png)​
 2. 最佳阈值: 3.7064  
-    
+   
     - `F0.5-score`: 0.6355  
     - `Precision`: 0.6430, `Recall`: 0.6070  
     - `TP`: 607, `FP`: 337, `FN`: 393, `TN`: 663
@@ -161,9 +161,10 @@ $$
 
     ![image](assets/image-20250619164946-qgs308a.png)​
 2. 最佳阈值: 1.1285  
-    F0.5-score: 0.8576  
-    Precision: 0.9217, Recall: 0.6710  
-    TP: 671, FP: 57, FN: 329, TN: 943
+    
+    - `F0.5-score`: 0.8576  
+    - `Precision`: 0.9217, `Recall`: 0.6710  
+    - `TP`: 671, `FP`: 57, `FN`: 329, `TN`: 943
 3. PR曲线
 
     ![image](assets/image-20250619165036-bo5b970.png)​
