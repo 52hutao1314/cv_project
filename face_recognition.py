@@ -202,14 +202,29 @@ def batch_recognize(query_folder="face_testset/positive", rep_path="representati
 
 
 if __name__ == "__main__":
-    # build_representations(db_path="face_subset", model_name="VGG-Face", rep_path="representations.pkl")
+    # build_representations(db_path="data/face_subset", model_name="VGG-Face", rep_path="representations.pkl")
 
-    # folder_embeddings = get_folder_embeddings(rep_path="representations.pkl")
-    # success, file_name = recognize(folder_embeddings, query_img="face_testset/negative/n006237_0200_01.jpg", model_name="VGG-Face")
-    # print(success, file_name)
-
-    batch_recognize(query_folder="face_testset/positive", rep_path="representations.pkl",
+    folder_embeddings = get_folder_embeddings(rep_path="representations.pkl")
+    _, success, file_name = recognize(folder_embeddings, "data/face_testset/negative/n006257_0079_01.jpg", "VGG-Face")
+    print(success, file_name)
+    batch_recognize(query_folder="data/face_testset/positive", rep_path="representations.pkl",
                     model_name="VGG-Face", result_path="positive_results.csv", recognize_num=1000)
-
-    batch_recognize(query_folder="face_testset/negative", rep_path="representations.pkl",
+    batch_recognize(query_folder="data/face_testset/negative", rep_path="representations.pkl",
                     model_name="VGG-Face", result_path="negative_results.csv", recognize_num=1000)
+
+    feature_lib_path = "representations.pkl"
+    query_image_path = "fake_face_for_n000014.png"
+    expected_target_id = "n000014"
+
+    folder_embeddings = get_folder_embeddings(rep_path=feature_lib_path)
+    confidence_ratio, distance, predicted_label = recognize(
+        folder_embeddings=folder_embeddings,
+        query_img=query_image_path,
+        model_name="VGG-Face"  # 确保和你建立特征库时使用的模型一致
+    )
+    if predicted_label == expected_target_id:
+        print(f"🎉 攻击成功！🎉")
+        print(f"系统已将伪造的人脸图片错误地识别为目标人物 '{expected_target_id}'。")
+    else:
+        print(f"❌ 攻击失败。❌")
+        print(f"系统将图片识别为了 '{predicted_label}'，而不是我们期望的 '{expected_target_id}'。")
