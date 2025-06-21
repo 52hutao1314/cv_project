@@ -6,18 +6,57 @@
 
 # 1 Introduction
 
-人脸识别技术已成为现代认证系统、安全应用和个人设备访问控制中日益普遍的技术。本报告介绍了使用VGG-Face2数据集和DeepFace框架开发的人脸识别系统。该系统通过将人脸特征与已知个体的数据库进行匹配来验证用户身份，实现了从数据准备到性能评估的完整流程。
+人脸识别技术作为生物特征识别领域的核心技术之一，已在现代社会中扮演着日益重要的角色。从智能手机解锁、移动支付等日常应用，到访问控制、公共安全监控和身份认证等专业领域，该技术都提供了高效、自然且非接触式的解决方案。其核心在于通过计算机视觉技术，分析数字图像或视频中的人脸特征，并将其与数据库中的已知人脸进行比对，从而实现个体身份的识别与验证。
 
-本项目的主要目标是：
+本报告详细介绍了一个基于Python环境、利用VGG-Face2数据集[[1]](#vggface2)和DeepFace深度学习框架[[3]](#deepface)所构建的人脸识别系统。我们实现了从数据预处理、模型构建到性能评估的完整开发流程，旨在探索和展示现代深度学习模型在人脸识别任务中的强大能力。
 
-1. 从庞大的VGG-Face2数据集中创建可管理的子集以提高处理效率
-2. 使用DeepFace的预训练模型实现人脸识别系统
-3. 使用正样本(已知个体)和负样本(未知个体)测试用例评估系统性能
-4. 确定可靠识别的最佳阈值
+本项目的核心目标具体如下：
+1. **构建与预处理数据集**：从大规模的VGG-Face2数据集中筛选并构建一个合理、可用的训练与测试子集，以适应项目开发的需求。
+2. **实现人脸识别模型**：利用DeepFace框架封装的先进的预训练模型（如VGG-Face用于特征提取）和高精度的人脸检测器（如RetinaFace），创建一个功能强大的人脸识别与验证系统。
+3. **系统性能综合评估**：设计并执行全面的测试方案，使用正样本（数据库内已知个体）和负样本（数据库外未知个体）对系统的准确率、召回率等关键指标进行量化评估。
+4. **确定最佳识别阈值**：通过分析系统在不同距离阈值下的表现，找到一个能够在识别准确性（True Positive Rate）和误报率（False Positive Rate）之间取得最佳平衡的阈值，以确保系统的可靠性。
+
+通过完成以上目标，本项目不仅旨在创建一个高效、准确的人脸识别原型系统，更希望为理解和应用此类技术提供一个清晰的实践范例。本报告的后续章节将依次介绍相关的核心技术，详细阐述系统设计方法与实现细节，展示并分析实验结果，最后对整个项目进行总结。
 
 # 2 Related work
 
-‍
+本项目的实现建立在若干业界领先的人脸数据集、深度学习框架和算法的基础之上。这些工具和技术共同构成了现代人脸识别系统的基石。本章节将对这些核心技术进行详细介绍。
+
+## 2.1 VGG-Face2数据集
+
+VGG-Face2 是由牛津大学视觉几何组（Visual Geometry Group, VGG）于2017年发布的一个大规模人脸图像数据集，是人脸识别领域最重要和最广泛使用的基准之一。该数据集的创建旨在推动不受约束环境下（in-the-wild）的人脸识别技术研究。
+
+VGG-Face2数据集的特点包括大规模与多样，标注质量高。VGG-Face2包含约331万张图像，涵盖9131个不同的身份个体，平均每个个体拥有约362张照片。这些图像采集自互联网，具有极高的多样性，涵盖了不同年龄、姿态、光照条件、表情、遮挡和分辨率的挑战，这使其非常适合训练能够适应真实世界复杂场景的深度学习模型。数据集经过精心筛选和清理，确保了每个身份下图像的准确性。同时，数据集提供了详细的元数据，包括面部边界框和关键点标注，为监督学习提供了精确的标签信息。
+
+在本项目中，我们利用VGG-Face2的子集作为系统的“已知身份”数据库，其丰富性和挑战性为评估我们系统的性能提供了坚实的基础。
+
+## 2.2 DeepFace框架
+
+DeepFace 是一个为Python开发者设计的轻量级、开源的人脸识别与面部属性分析框架。它极大地简化了在Python应用中集成先进人脸识别功能的过程。DeepFace将当前最主流的深度学习模型和算法封装在统一的API后，使得开发者无需深入了解底层复杂的模型结构即可轻松调用。
+
+DeepFace封装了多种业界顶尖的预训练人脸识别模型，如VGG-Face、Google Facenet、Facebook DeepFace、ArcFace等，用户可以根据需求灵活选择。功能上，除了核心的人脸验证和识别功能，它还支持面部属性分析，能够检测年龄、性别、情绪和种族等信息。DeepFace同时支持多种人脸检测后段，如OpenCV、YOLO及本项目中所使用的RetinaFace，这允许了速度和精度之间的权衡。
+
+在本项目中，DeepFace作为核心开发工具，我们利用其便捷的接口调用RetinaFace寻找并对齐人脸并使用VGG-Face模型进行特征向量提取，从而显著加快了开发周期。
+
+## 2.4 RetinaFace人脸检测模型
+
+RetinaFace[[2]](#retinaface)是一个先进的、基于深度学习的单阶段人脸检测模型，以其在真实图像上的高精度检测能力而闻名。与传统检测器相比，RetinaFace不仅能检测各种尺寸和姿态的人脸，还能在存在部分遮挡、模糊和极端光照等挑战性条件下保持优异性能。
+
+RetinaFace在一个统一的框架内同时完成人脸边界框预测、5个关键面部特征点（双眼中心、鼻尖、嘴角）定位以及3D面部重建。通过监督学习和自监督学习的结合，RetinaFace能够非常精确地定位面部区域和关键点。RetinaFace的多任务损失函数设计使其在检测精度和速度上都表现出色，适用于实时应用场景。其网络结构基于ResNet和FPN，能够有效处理不同尺度的人脸。
+![retinaface-framework](assets/retinaface-framework.png)
+![retinaface-multitaskloss](assets/retinaface-multitaskloss.png)
+
+在本项目的工作流程中，RetinaFace扮演着至关重要的预处理角色。在进行特征提取之前，我们首先使用RetinaFace来准确定位图像中的人脸。其精确的边界框和关键点信息保证了后续人脸对齐和裁剪的质量，这对于提升VGG-Face模型的识别准确率至关重要。
+
+## 2.3 VGG-Face人脸识别模型
+
+VGG-Face[[4]](#vggface)是由牛津大学VGG团队提出的一种基于深度卷积神经网络（CNN）的人脸识别模型。该模型结构基于经典的VGG-16网络，并通过在早期的大规模人脸数据集（VGG-Face）上进行训练，使其能够学习到用于区分不同人脸身份的丰富、稳健的特征表示。
+
+VGG-Face将一张输入的人脸图像通过深度网络，最终在前馈过程的末端生成一个高维的特征向量（即“embedding”）。这个向量可以被视为该人脸在特征空间中的一个独特坐标。在理想情况下，来自同一个体的不同照片所生成的特征向量在空间中会彼此靠近，而来自不同个体的向量则会相互远离。因此，通过计算两个特征向量之间的距离（如欧氏距离），就可以量化两个人脸的相似度。
+
+![vggface-framework](assets/vggface-framework.png)
+
+在我们的系统中，VGG-Face模型是实现人脸识别的核心引擎，负责将人脸图像转化为可供比较的、标准化的特征向量。
 
 # 3 Approach
 
@@ -153,4 +192,7 @@ $$
 
 # References
 
-‍
+1. <a id="vggface2"></a> Cao, Q., Shen, L., Xie, W., Parkhi, O. M., & Zisserman, A. (2018, May). Vggface2: A dataset for recognising faces across pose and age. In 2018 13th IEEE international conference on automatic face & gesture recognition (FG 2018) (pp. 67-74). IEEE.
+2. <a id="retinaface"></a> Deng, J., Guo, J., Ververas, E., Kotsia, I., & Zafeiriou, S. (2020). RetinaFace: Single-Shot Multi-Level face localisation in the wild. 2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR). https://doi.org/10.1109/cvpr42600.2020.00525
+3. <a id="deepface"></a> Serengil, S. I., & Ozpinar, A. (2020). LightFace: a Hybrid Deep Face Recognition framework. 2022 Innovations in Intelligent Systems and Applications Conference (ASYU), 1–5. https://doi.org/10.1109/asyu50717.2020.9259802
+4. <a id="vggface"></a> Parkhi, O., Vedaldi, A., & Zisserman, A. (2015). Deep face recognition. In BMVC 2015-Proceedings of the British Machine Vision Conference 2015. British Machine Vision Association.
