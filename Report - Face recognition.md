@@ -23,7 +23,7 @@
 
 ### 流程图
 
-![image](assets/workflow.png)
+![image](assets/workflow.svg)
 
 ### 3.1 数据集准备
 
